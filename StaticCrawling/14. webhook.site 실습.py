@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup as BS
 import requests as req
 
-# python "classification/14. webhook.site 실습.py"
+# python "StaticCrawling/14. webhook.site 실습.py"
 
 # GET 요청
 

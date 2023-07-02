@@ -1,6 +1,8 @@
 
 #  ---  네이버 쇼핑 크롤링  -------
 
+# python "StaticCrawling/10. css 활용 실습 (1).py"
+
 from bs4 import BeautifulSoup as BS
 import requests as req
 

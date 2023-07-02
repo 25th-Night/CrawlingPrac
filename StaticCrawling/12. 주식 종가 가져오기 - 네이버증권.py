@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup as BS
 import requests as req
 
-# python "classification/12. 주식 종가 가져오기.py"
+# python "StaticCrawling/12. 주식 종가 가져오기.py"
 
 url = "https://finance.naver.com/sise/lastsearch2.naver"
 res = req.get(url)
