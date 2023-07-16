@@ -3,6 +3,9 @@
 
 # 크롬 드라이버 기본 모듈
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
@@ -36,18 +39,9 @@ service = Service(executable_path=ChromeDriverManager().install())
 
 browser = webdriver.Chrome(service=service, options=chrome_options)
 
-# 페이지 이동
-browser.get("https://naver.com")
-time.sleep(1)
+# 페이지 이동 및 로딩 대기
 browser.get("https://shopping.naver.com")
-time.sleep(1)
-
-# 뒤로 가기
-browser.back()
-time.sleep(1)
-
-# 앞으로 가기
-browser.forward()
-
-time.sleep(3)
+print("크롬 브라우저 시작")
+WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[title='검색어 입력']")))
+print("크롬 브라우저 종료")
 browser.close()
