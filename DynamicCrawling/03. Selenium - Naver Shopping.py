@@ -49,8 +49,13 @@ def find(wait, css_selector):
 # 검색 입력 Element
 search = find(wait, 'input[type="text"][title="검색어 입력"]')
 
-# 키 입력
+# 검색어 입력
 search.send_keys("토니모리 클렌징폼")
+
+# 검색 버튼 클릭
+button = find(wait, 'div[class*="_searchInput_layer_tooltip_"] ~ button[class*="_searchInput_button_search_"]')
+print(button)
+button.click()
 
 time.sleep(3)
 
