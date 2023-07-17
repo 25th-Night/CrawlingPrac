@@ -1,4 +1,3 @@
-
 # python "DynamicCrawling/03. Selenium - Naver Shopping.py"
 
 # 크롬 드라이버 기본 모듈
@@ -13,7 +12,6 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
 import time
-
 
 # Selenium이 Chrome Driver를 만듦
 # Driver가 하나의 프로그램이니까, 프로그램의 위치를 지정해줘야 함
@@ -32,10 +30,8 @@ chrome_options.add_argument("--no-sandbox")
 # 불필요한 에러 메시지 삭제
 chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
-
 # 크롬 드라이버 최신 버전 설정
 service = Service(executable_path=ChromeDriverManager().install())
-
 
 browser = webdriver.Chrome(service=service, options=chrome_options)
 
@@ -44,9 +40,18 @@ browser.get("https://shopping.naver.com")
 
 # 페이지 로딩 대기
 wait = WebDriverWait(browser, 10)
-# wait.until 의 반환 값이 바로 우리가 찾는 element!
-# css selector를 사용한 방법으로 코드 작성
-el = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="text"][title="검색어 입력"]')))
-print(el)
+
+
+# Element 찾는 함수
+def find(wait, css_selector):
+    return wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
+
+# 검색 입력 Element
+search = find(wait, 'input[type="text"][title="검색어 입력"]')
+
+# 키 입력
+search.send_keys("토니모리 클렌징폼")
+
+time.sleep(3)
 
 browser.close()
