@@ -41,7 +41,12 @@ browser = webdriver.Chrome(service=service, options=chrome_options)
 
 # 페이지 이동 및 로딩 대기
 browser.get("https://shopping.naver.com")
-print("크롬 브라우저 시작")
-WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "input[title='검색어 입력']")))
-print("크롬 브라우저 종료")
+
+# 페이지 로딩 대기
+wait = WebDriverWait(browser, 10)
+# wait.until 의 반환 값이 바로 우리가 찾는 element!
+# css selector를 사용한 방법으로 코드 작성
+el = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'input[type="text"][title="검색어 입력"]')))
+print(el)
+
 browser.close()
