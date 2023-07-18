@@ -1,5 +1,6 @@
 # python "DynamicCrawling/04. Selenium - Naver Shopping_SmartStore.py"
 
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -14,7 +15,6 @@ import pyperclip
 
 # 크롬 드라이버 자동 업데이트을 위한 모듈
 from webdriver_manager.chrome import ChromeDriverManager
-
 
 # 크롬 브라우저 옵션 지정
 chrome_options = Options()
@@ -33,15 +33,26 @@ short_wait = WebDriverWait(browser, 3)
 
 browser.get("https://shopping.naver.com")
 
-# 로그인 버튼 찾기
-# login_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "a#gnb_login_button")))
-login_button = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "a#gnb_login_button")))
-print(login_button.text)
 
-#로그인 버튼 클릭
-login_button.click()
+# Element 찾는 함수
+def find(css_selector: str):
+    return wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, css_selector)))
+
+# 로그인 버튼 찾아서 클릭
+find("a#gnb_login_button").click()
+
+# ID, PW 입력창 찾기
+input_id = find("input#id")
+input_pw = find("input#pw")
+
+# .env 파일 로드
+load_dotenv()
+
+# ID, PW 입력 후 엔터 버튼 누르기
+input_id.send_keys(os.getenv("NAVER_ID"))
+input_pw.send_keys(os.getenv("NAVER_PW"))
+input_pw.send_keys("\n")
 
 time.sleep(3)
 
 browser.close()
-
