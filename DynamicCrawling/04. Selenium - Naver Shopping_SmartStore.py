@@ -35,20 +35,20 @@ browser.get("https://shopping.naver.com")
 
 
 # Element 찾는 함수
-def find_v(css_selector: str):
+def find_v(wait: WebDriverWait, css_selector: str):
     return wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, css_selector)))
 
 
-def find_p(css_selector: str):
+def find_p(wait: WebDriverWait, css_selector: str):
     return wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
 
 
 # 로그인 버튼 찾아서 클릭
-find_v("a#gnb_login_button").click()
+find_v(wait, "a#gnb_login_button").click()
 
 # ID, PW 입력창 찾기
-input_id = find_v("input#id")
-input_pw = find_v("input#pw")
+input_id = find_v(wait, "input#id")
+input_pw = find_v(wait, "input#pw")
 
 # .env 파일 로드
 load_dotenv()
@@ -57,17 +57,26 @@ load_dotenv()
 # 1. ID를 클립보드에 복사
 pyperclip.copy(os.getenv("NAVER_ID"))
 # 2. 클립보드로부터 ID를 붙여넣기
-input_id.send_keys(Keys.CONTROL, "v")
+input_id.send_keys(Keys.CONTROL, "v")  # MacOS는 Keys.COMMAND
 # 3. PW를 클립보드에 복사
 pyperclip.copy(os.getenv("NAVER_PW"))
 # - 클립보드로부터 PW를 붙여넣기
-input_pw.send_keys(Keys.CONTROL, "v")
+input_pw.send_keys(Keys.CONTROL, "v")  # MacOS는 Keys.COMMAND
 # 4. 엔터 누르기
 input_pw.send_keys("\n")
 
 # 정상 로그인 여부 체크 - 로그아웃 버튼 유무 확인
-find_p("a#gnb_logout_button")
+find_p(short_wait, "a#gnb_logout_button")
 
+# 검색 창에 검색어 입력 후 엔터
+# 1. 검색 창
+search = find_v(short_wait, 'input[type="text"][title="검색어 입력"]')
+# 2. 검색어 입력
+search.send_keys("아이폰 케이스")
+# 3. 잠시 대기
+time.sleep(1)
+# 4. Enter 키 입력
+search.send_keys("\n")
 
 time.sleep(3)
 
