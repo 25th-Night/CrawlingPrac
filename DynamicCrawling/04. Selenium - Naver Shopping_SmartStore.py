@@ -78,6 +78,15 @@ time.sleep(1)
 # 4. Enter 키 입력
 search.send_keys("\n")
 
+# 구매할 상품 목록 가져오기
+# 1. 찾는 요소가 있는지를 확인하기 위해 WebDriverWait를 먼저 실행
+target_product = find_v(wait, "a[class*=adProduct_link__]")
+# 2. 그 다음에 find_elements로 여러 Elements 를 모두 가져오기
+titles = browser.find_elements(By.CSS_SELECTOR, "a[class*=adProduct_link__]")
+
+for title in titles:
+    print(title.text)
+
 time.sleep(3)
 
 browser.close()
