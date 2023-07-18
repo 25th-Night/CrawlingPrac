@@ -12,26 +12,36 @@ import time
 
 import pyperclip
 
-# Å©·Ò µå¶óÀÌ¹ö ÀÚµ¿ ¾÷µ¥ÀÌÆ®À» À§ÇÑ ¸ğµâ
+# í¬ë¡¬ ë“œë¼ì´ë²„ ìë™ ì—…ë°ì´íŠ¸ì„ ìœ„í•œ ëª¨ë“ˆ
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-# Å©·Ò ºê¶ó¿ìÀú ¿É¼Ç ÁöÁ¤
+# í¬ë¡¬ ë¸Œë¼ìš°ì € ì˜µì…˜ ì§€ì •
 chrome_options = Options()
 
-# ºÒÇÊ¿äÇÑ ¿¡·¯ ¸Ş½ÃÁö »èÁ¦
+# ë¶ˆí•„ìš”í•œ ì—ëŸ¬ ë©”ì‹œì§€ ì‚­ì œ
 chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
-# Å©·Ò µå¶óÀÌ¹ö ÃÖ½Å ¹öÀü ¼³Á¤
+# í¬ë¡¬ ë“œë¼ì´ë²„ ìµœì‹  ë²„ì „ ì„¤ì •
 service = Service(executable_path=ChromeDriverManager().install())
 
 browser = webdriver.Chrome(service=service, options=chrome_options)
 
-# ÆäÀÌÁö ·Îµù ´ë±â
+# í˜ì´ì§€ ë¡œë”© ëŒ€ê¸°
 wait = WebDriverWait(browser, 10)
 short_wait = WebDriverWait(browser, 3)
 
 browser.get("https://shopping.naver.com")
+
+# ë¡œê·¸ì¸ ë²„íŠ¼ ì°¾ê¸°
+# login_button = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "a#gnb_login_button")))
+login_button = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, "a#gnb_login_button")))
+print(login_button.text)
+
+#ë¡œê·¸ì¸ ë²„íŠ¼ í´ë¦­
+login_button.click()
+
+time.sleep(3)
 
 browser.close()
 
