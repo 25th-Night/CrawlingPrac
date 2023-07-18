@@ -35,15 +35,20 @@ browser.get("https://shopping.naver.com")
 
 
 # Element 찾는 함수
-def find(css_selector: str):
+def find_v(css_selector: str):
     return wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, css_selector)))
 
+
+def find_p(css_selector: str):
+    return wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, css_selector)))
+
+
 # 로그인 버튼 찾아서 클릭
-find("a#gnb_login_button").click()
+find_v("a#gnb_login_button").click()
 
 # ID, PW 입력창 찾기
-input_id = find("input#id")
-input_pw = find("input#pw")
+input_id = find_v("input#id")
+input_pw = find_v("input#pw")
 
 # .env 파일 로드
 load_dotenv()
@@ -59,6 +64,10 @@ pyperclip.copy(os.getenv("NAVER_PW"))
 input_pw.send_keys(Keys.CONTROL, "v")
 # 4. 엔터 누르기
 input_pw.send_keys("\n")
+
+# 정상 로그인 여부 체크 - 로그아웃 버튼 유무 확인
+find_p("a#gnb_logout_button")
+
 
 time.sleep(3)
 
