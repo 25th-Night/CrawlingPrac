@@ -49,8 +49,15 @@ input_pw = find("input#pw")
 load_dotenv()
 
 # ID, PW 입력 후 엔터 버튼 누르기
-input_id.send_keys(os.getenv("NAVER_ID"))
-input_pw.send_keys(os.getenv("NAVER_PW"))
+# 1. ID를 클립보드에 복사
+pyperclip.copy(os.getenv("NAVER_ID"))
+# 2. 클립보드로부터 ID를 붙여넣기
+input_id.send_keys(Keys.CONTROL, "v")
+# 3. PW를 클립보드에 복사
+pyperclip.copy(os.getenv("NAVER_PW"))
+# - 클립보드로부터 PW를 붙여넣기
+input_pw.send_keys(Keys.CONTROL, "v")
+# 4. 엔터 누르기
 input_pw.send_keys("\n")
 
 time.sleep(3)
