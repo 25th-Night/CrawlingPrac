@@ -84,19 +84,48 @@ search.send_keys("\n")
 target = find_v(wait, "a[class*=adProduct_link__]")
 target.click()
 
-time.sleep(2)
-
-print(browser.window_handles)
-
-# 현재 띄워진 창의 title 출력해보기
-print(browser.title)
-
 # 연결된 창으로 전환
 browser.switch_to.window(browser.window_handles[1])
 
-# 현재 띄워진 창의 title 출력해보기
-print(browser.title)
+# Select box 요소를 찾기
+# 1. wait은 하나만 가져오기 때문에 요소를 찾아 기다리는 역할로만 사용
+find_p(wait, 'a[aria-haspopup="listbox"]')
+# 2. find_elements 로 모든 Select box 요소를 가져오기
+select_boxes = browser.find_elements(By.CSS_SELECTOR, 'a[aria-haspopup="listbox"]')
+for select_box in select_boxes:
+    print(select_box.text)
 
-time.sleep(3)
+# 1번째 select box부터 선택
+select_boxes[0].click()
+time.sleep(0.3)
+
+# 1번째 select box의 1번째 옵션을 선택
+# find_p(wait, 'ul[role=listbox] a[role=option]')
+browser.find_elements(By.CSS_SELECTOR, 'ul[role=listbox] a[role=option]')[0].click()
+
+# 2번째 select box부터 선택
+select_boxes[1].click()
+time.sleep(0.1)
+
+# 2번째 select box의 1번째 옵션을 선택
+browser.find_elements(By.CSS_SELECTOR, 'ul[role=listbox] a[role=option]')[0].click()
+
+# 구매 버튼 클릭
+buy_btn = find_v(wait, "div[class*='N=a:pcs.buy'] a")
+buy_btn.click()
+
+# 배송지 선택 - 우리집
+# find_v(wait, 'div.recent_deli span.item')
+delivery_list = browser.find_elements(By.CSS_SELECTOR, 'div.recent_deli span.item')
+for delivery in delivery_list:
+    print(delivery.text)
+    if '우리집' in delivery.text:
+        delivery.find_element(By.CSS_SELECTOR, 'span.radio-mark').click()
+        break
+
+# 결제 버튼 클릭
+find_p(wait, 'button.btn_payment').click()
+
+time.sleep(5)
 
 browser.quit()
