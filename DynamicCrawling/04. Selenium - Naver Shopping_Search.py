@@ -1,4 +1,4 @@
-# python "DynamicCrawling/04. Selenium - Naver Shopping_SmartStore.py"
+# python "DynamicCrawling/04. Selenium - Naver Shopping_Search.py"
 
 from dotenv import load_dotenv
 from selenium import webdriver
