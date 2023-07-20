@@ -11,30 +11,26 @@ import os
 import time
 
 
-# Å©·Ò µå¶óÀÌ¹ö ÀÚµ¿ ¾÷µ¥ÀÌÆ®À» À§ÇÑ ¸ğµâ
+# í¬ë¡¬ ë“œë¼ì´ë²„ ìë™ ì—…ë°ì´íŠ¸ì„ ìœ„í•œ ëª¨ë“ˆ
 from webdriver_manager.chrome import ChromeDriverManager
 
-# Å©·Ò ºê¶ó¿ìÀú ¿É¼Ç ÁöÁ¤
+# í¬ë¡¬ ë¸Œë¼ìš°ì € ì˜µì…˜ ì§€ì •
 chrome_options = Options()
 
-# ºÒÇÊ¿äÇÑ ¿¡·¯ ¸Ş½ÃÁö »èÁ¦
+# ë¶ˆí•„ìš”í•œ ì—ëŸ¬ ë©”ì‹œì§€ ì‚­ì œ
 chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
-# Å©·Ò µå¶óÀÌ¹ö ÃÖ½Å ¹öÀü ¼³Á¤
+# í¬ë¡¬ ë“œë¼ì´ë²„ ìµœì‹  ë²„ì „ ì„¤ì •
 service = Service(executable_path=ChromeDriverManager().install())
 
 
 browser = webdriver.Chrome(service=service, options=chrome_options)
 
-# ÆäÀÌÁö ·Îµù ´ë±â
+# í˜ì´ì§€ ë¡œë”© ëŒ€ê¸°
 wait = WebDriverWait(browser, 10)
 short_wait = WebDriverWait(browser, 3)
 
-# ¿øÇÏ´Â ÆäÀÌÁö¿¡ Á¢¼Ó
-browser.get("https://shopping.naver.com")
-
-
-# Element Ã£´Â ÇÔ¼ö
+# Element ì°¾ëŠ” í•¨ìˆ˜
 def find_visible(wait: WebDriverWait, css_selector: str) -> WebDriverWait:
     return wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, css_selector)))
 
@@ -48,3 +44,29 @@ def find_present(wait: WebDriverWait, css_selector: str) -> WebDriverWait:
 def finds_present(wait: WebDriverWait, css_selector: str):
     find_present(wait, css_selector)
     return browser.find_elements(By.CSS_SELECTOR, css_selector)
+
+# ì›í•˜ëŠ” í˜ì´ì§€ì— ì ‘ì†
+browser.get("http://shop.danawa.com/virtualestimate/?controller=estimateMain&methods=index&marketPlaceSeq=16&logger_kw=dnw_lw_esti")
+
+# ê²¬ì  ëŒ€ìƒ ì¹´í…Œê³ ë¦¬ ë²ˆí˜¸
+category = {
+    "cpu": "873",
+    "ë©”ì¸ë³´ë“œ": "875",
+    "ë©”ëª¨ë¦¬": "874",
+    "ê·¸ë˜í”½ì¹´ë“œ": "876",
+    "SSD": "32617",
+    "ì¼€ì´ìŠ¤": "879",
+    "íŒŒì›Œ": "880",
+}
+
+main_board = find_visible(wait, "dd.category_" + category["ë©”ì¸ë³´ë“œ"] + " a")
+main_board.click()
+
+time.sleep(3)
+
+cpu = find_visible(wait, "dd.category_" + category["cpu"] + " a")
+cpu.click()
+
+time.sleep(5)
+
+browser.quit()
