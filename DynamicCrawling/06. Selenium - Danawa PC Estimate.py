@@ -45,6 +45,21 @@ def finds_present(wait: WebDriverWait, css_selector: str):
     find_present(wait, css_selector)
     return browser.find_elements(By.CSS_SELECTOR, css_selector)
 
+def find_visible_x(wait: WebDriverWait, xpath: str) -> WebDriverWait:
+    return wait.until(EC.visibility_of_element_located((By.XPATH, xpath)))
+
+def finds_visible_x(wait: WebDriverWait, xpath: str):
+    find_visible_x(wait, xpath)
+    return browser.find_elements(By.XPATH, xpath)
+
+# 세부 선택 항목 찾는 함수
+def find_detail_options(wait, item_name):
+    detail_options = finds_present(wait, 'div.search_option_item')
+    for detail_option in detail_options:
+        if item_name in detail_option.text:
+            return detail_option
+
+
 # 원하는 페이지에 접속
 browser.get("http://shop.danawa.com/virtualestimate/?controller=estimateMain&methods=index&marketPlaceSeq=16&logger_kw=dnw_lw_esti")
 
@@ -59,13 +74,34 @@ category = {
     "파워": "880",
 }
 
-main_board = find_visible(wait, "dd.category_" + category["메인보드"] + " a")
-main_board.click()
+# 카테고리에 대한 CSS Selector
+category_css = {
+    c: "dd.category_" + category[c] + " a" for c in category
+}
 
-time.sleep(3)
-
-cpu = find_visible(wait, "dd.category_" + category["cpu"] + " a")
+# cpu 카테고리 클릭
+cpu = find_visible(wait, category_css["cpu"] )
 cpu.click()
+
+# 잠시 대기
+time.sleep(1)
+
+
+
+# cpu 제조사 input 불러오기
+cpu_manufacturer_list = find_detail_options(wait, "제조사").find_elements(By.CSS_SELECTOR, 'input')
+print(cpu_manufacturer_list)
+for cpu_manufacturer in cpu_manufacturer_list:
+    print(cpu_manufacturer.get_attribute('data'))
+
+print('----------------')
+
+# cpu 제조사 input 불러와서 클릭
+cpu_manufacturer_list = finds_visible_x(wait, '//div[contains(@class, "search_option_item") and .//*[contains(text(), "제조사")]]//input')
+for cpu_manufacturer in cpu_manufacturer_list:
+    browser.execute_script("arguments[0].click();", cpu_manufacturer)
+    print(cpu_manufacturer.get_attribute('data'))
+
 
 time.sleep(5)
 
