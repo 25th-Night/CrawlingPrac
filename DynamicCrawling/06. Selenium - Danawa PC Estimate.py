@@ -52,13 +52,6 @@ def finds_visible_x(wait: WebDriverWait, xpath: str):
     find_visible_x(wait, xpath)
     return browser.find_elements(By.XPATH, xpath)
 
-# 세부 선택 항목 찾는 함수
-def find_detail_options(wait, item_name):
-    detail_options = finds_present(wait, 'div.search_option_item')
-    for detail_option in detail_options:
-        if item_name in detail_option.text:
-            return detail_option
-
 
 # 원하는 페이지에 접속
 browser.get("http://shop.danawa.com/virtualestimate/?controller=estimateMain&methods=index&marketPlaceSeq=16&logger_kw=dnw_lw_esti")
@@ -87,20 +80,11 @@ cpu.click()
 time.sleep(1)
 
 
-
 # cpu 제조사 input 불러오기
-cpu_manufacturer_list = find_detail_options(wait, "제조사").find_elements(By.CSS_SELECTOR, 'input')
-print(cpu_manufacturer_list)
-for cpu_manufacturer in cpu_manufacturer_list:
-    print(cpu_manufacturer.get_attribute('data'))
-
-print('----------------')
-
-# cpu 제조사 input 불러와서 클릭
-cpu_manufacturer_list = finds_visible_x(wait, '//div[contains(@class, "search_option_item") and .//*[contains(text(), "제조사")]]//input')
-for cpu_manufacturer in cpu_manufacturer_list:
-    browser.execute_script("arguments[0].click();", cpu_manufacturer)
-    print(cpu_manufacturer.get_attribute('data'))
+cpu_options_list = finds_visible_x(wait, '//div[contains(@class, "search_option_item") and .//*[contains(text(), "제조사")]]//input')
+print("CPU 제조사를 골라주세요.")
+for i, option in enumerate(cpu_options_list):
+    print(f"{str(i+1)}. {option.get_attribute('data')}")
 
 
 time.sleep(5)
