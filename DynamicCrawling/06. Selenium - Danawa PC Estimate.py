@@ -85,19 +85,6 @@ def choose_one(text, options):
     return choose - 1
 
 
-def parse_selling_products():
-    time.sleep(0.5)
-    products = []
-    for product in finds_visible(wait, 'table.tbl_list tr[class^=productList_]'):
-        name = product.find_element(By.CSS_SELECTOR, 'p.subject a').text
-        try:
-            price = product.find_element(By.CSS_SELECTOR, 'span.prod_price').text
-        except:
-            continue
-        products.append((name, price))
-    return products
-
-
 def go_to_category(wait, category_name):
     find_visible(wait, category_css[category_name]).click()
     time.sleep(1)
@@ -118,6 +105,31 @@ def choice_content_input_list(wait, content):
 
     return options[i].get_attribute('data')
 
+
+def parse_selling_products():
+    time.sleep(0.5)
+    products = []
+    products_info = []
+    for product in finds_visible(wait, 'table.tbl_list tr[class^=productList_]'):
+        name = product.find_element(By.CSS_SELECTOR, 'p.subject a').text
+        try:
+            price = product.find_element(By.CSS_SELECTOR, 'span.prod_price').text
+        except:
+            continue
+        products.append(product)
+        products_info.append(f"제품명: {name}, 가격: {price}")
+    return products, products_info
+
+
+def choice_product():
+    try:
+        products, products_info = parse_selling_products()
+        i = choose_one("제품의 번호를 입력해주세요.\n 번호/제품명/가격 을 의미합니다.", products_info)
+        products[i].find_element(By.CSS_SELECTOR, 'td.rig_line a').click()
+    except:
+        print("검색된 제품이 존재하지 않습니다.")
+
+
 # 원하는 페이지에 접속
 browser.get("http://shop.danawa.com/virtualestimate/?controller=estimateMain&methods=index&marketPlaceSeq=16&logger_kw=dnw_lw_esti")
 
@@ -126,25 +138,25 @@ go_to_category(wait, "cpu")
 
 # cpu 제조사를 유저로부터 입력받아 선택
 selected_manufacturer = choice_content_input_list(wait, "제조사")
-print(selected_manufacturer)
 
 # 제조사에 따른 cpu 타입을 유저로부터 입력받아 선택
 choice_content_input_list(wait, selected_manufacturer)
 
-# cpu 리스트 가져오기
-cpu_list = parse_selling_products()
-
-for name, price in cpu_list:
-    print(f"제품명: {name} \n가격: {price}")
+# 유저로부터 선택받은 cpu를 담기
+choice_product()
 
 # 메인보드
 go_to_category(wait, "메인보드")
 
-# 메인보드 제조사 리스트 클릭
+# 메인보드 제조사, 제품 분류 클릭
+
 choice_content_input_list(wait, "제조사")
 
 # 메인보드 제품 분류 리스트 클릭
 choice_content_input_list(wait, "제품 분류")
+
+# 유저로부터 선택받은 메인보드를 담기
+choice_product()
 
 time.sleep(5)
 
