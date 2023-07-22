@@ -60,6 +60,17 @@ def choose_one(text, options):
     choose = int(input("-> "))
     return choose - 1
 
+def parse_selling_products():
+    products = []
+    for product in finds_visible(wait, 'table.tbl_list tr[class^=productList_]'):
+        name = product.find_element(By.CSS_SELECTOR, 'p.subject a').text
+        try:
+            price = product.find_element(By.CSS_SELECTOR, 'span.prod_price').text
+        except:
+            continue
+        products.append((name, price))
+    return products
+
 
 # 원하는 페이지에 접속
 browser.get("http://shop.danawa.com/virtualestimate/?controller=estimateMain&methods=index&marketPlaceSeq=16&logger_kw=dnw_lw_esti")
@@ -115,6 +126,12 @@ i = choose_one("해당 제조사의 CPU 타입를 골라주세요.",
 
 # 사용자가 선택한 cpu 타입의 checkbox를 클릭
 browser.execute_script("arguments[0].click();", cpu_type_list[i])
+
+# cpu 리스트 가져오기
+cpu_list = parse_selling_products()
+
+for name, price in cpu_list:
+    print(f"제품명: {name} \n가격: {price}")
 
 time.sleep(5)
 
