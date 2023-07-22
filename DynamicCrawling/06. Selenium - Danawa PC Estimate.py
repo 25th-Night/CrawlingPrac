@@ -139,6 +139,7 @@ go_to_category(wait, "cpu")
 # cpu 제조사를 유저로부터 입력받아 선택
 selected_manufacturer = choice_content_input_list(wait, "제조사")
 
+
 # 제조사에 따른 cpu 타입을 유저로부터 입력받아 선택
 choice_content_input_list(wait, selected_manufacturer)
 
@@ -153,7 +154,11 @@ go_to_category(wait, "메인보드")
 choice_content_input_list(wait, "제조사")
 
 # 메인보드 제품 분류 리스트 클릭
-choice_content_input_list(wait, "제품 분류")
+cpu_type = find_visible_x(wait,
+               f'//div[contains(@class, "search_option_item") and ./*[contains(text(), "제품 분류")]]//input[contains(@data, "{selected_manufacturer}")]'
+               )
+browser.execute_script("arguments[0].click();", cpu_type)
+
 
 # 유저로부터 선택받은 메인보드를 담기
 choice_product()
