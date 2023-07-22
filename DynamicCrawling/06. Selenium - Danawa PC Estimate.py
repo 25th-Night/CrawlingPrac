@@ -52,6 +52,14 @@ def finds_visible_x(wait: WebDriverWait, xpath: str):
     find_visible_x(wait, xpath)
     return browser.find_elements(By.XPATH, xpath)
 
+def choose_one(text, options):
+    print("--------------------")
+    print("text")
+    for i, option in enumerate(options, start=1):
+        print(f"{i}. {option}")
+    choose = int(input("-> "))
+    return choose - 1
+
 
 # 원하는 페이지에 접속
 browser.get("http://shop.danawa.com/virtualestimate/?controller=estimateMain&methods=index&marketPlaceSeq=16&logger_kw=dnw_lw_esti")
@@ -81,11 +89,32 @@ time.sleep(1)
 
 
 # cpu 제조사 input 불러오기
-cpu_options_list = finds_visible_x(wait, '//div[contains(@class, "search_option_item") and .//*[contains(text(), "제조사")]]//input')
-print("CPU 제조사를 골라주세요.")
-for i, option in enumerate(cpu_options_list):
-    print(f"{str(i+1)}. {option.get_attribute('data')}")
+# cpu_options_list = finds_visible_x(wait,
+#                                    '//div[contains(@class, "search_option_item") and .//*[contains(text(), "제조사")]]//input')
+cpu_options_list = finds_visible_x(wait,
+                                   '//div[contains(@class, "search_option_item") and .//*[contains(text(), "제조사")]]//input')
 
+# 사용자로부터 선택할 cpu 제조사를 입력받기
+i = choose_one("CPU 제조사를 골라주세요.",
+               [option.get_attribute('data') for option in cpu_options_list])
+cpu_manugacturer = cpu_options_list[i].get_attribute('data')
+
+# 사용자가 선택한 cpu 제조사의 checkbox를 클릭
+browser.execute_script("arguments[0].click();", cpu_options_list[i])
+
+# 해당 제조사의 cpu 타입 불러오기
+cpu_type_list = finds_visible_x(wait, f'//div[contains(text(), "{cpu_manugacturer}")]/..//input[@type="checkbox"]')
+
+# '옵션 더보기' 버튼 클릭
+cpu_type_more_btn = find_visible_x(wait, f'//div[contains(text(), "{cpu_manugacturer}")]/..//button[@class="btn_item_more"]')
+cpu_type_more_btn.click()
+
+# 사용자로부터 선택할 cpu 타입을 입력받기
+i = choose_one("해당 제조사의 CPU 타입를 골라주세요.",
+               [option.get_attribute('data') for option in cpu_type_list])
+
+# 사용자가 선택한 cpu 타입의 checkbox를 클릭
+browser.execute_script("arguments[0].click();", cpu_type_list[i])
 
 time.sleep(5)
 
