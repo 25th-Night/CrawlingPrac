@@ -139,7 +139,6 @@ go_to_category(wait, "cpu")
 # cpu 제조사를 유저로부터 입력받아 선택
 selected_manufacturer = choice_content_input_list(wait, "제조사")
 
-
 # 제조사에 따른 cpu 타입을 유저로부터 입력받아 선택
 choice_content_input_list(wait, selected_manufacturer)
 
@@ -150,7 +149,6 @@ choice_product()
 go_to_category(wait, "메인보드")
 
 # 메인보드 제조사, 제품 분류 클릭
-
 choice_content_input_list(wait, "제조사")
 
 # 메인보드 제품 분류 리스트 클릭
@@ -159,8 +157,15 @@ cpu_type = find_visible_x(wait,
                )
 browser.execute_script("arguments[0].click();", cpu_type)
 
-
 # 유저로부터 선택받은 메인보드를 담기
+choice_product()
+
+# 메모리 - 제조사/사용 장치/제품 분류/메모리 용량
+go_to_category(wait, "메모리")
+choice_content_input_list(wait, "제조사")
+choice_content_input_list(wait, "사용 장치")
+choice_content_input_list(wait, "제품 분류")
+choice_content_input_list(wait, "메모리 용량")
 choice_product()
 
 time.sleep(5)
