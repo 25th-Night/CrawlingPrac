@@ -133,7 +133,7 @@ def choice_product():
 # 원하는 페이지에 접속
 browser.get("http://shop.danawa.com/virtualestimate/?controller=estimateMain&methods=index&marketPlaceSeq=16&logger_kw=dnw_lw_esti")
 
-# cpu 카테고리로 이동
+# cpu
 go_to_category(wait, "cpu")
 
 # cpu 제조사를 유저로부터 입력받아 선택
@@ -166,6 +166,33 @@ choice_content_input_list(wait, "제조사")
 choice_content_input_list(wait, "사용 장치")
 choice_content_input_list(wait, "제품 분류")
 choice_content_input_list(wait, "메모리 용량")
+choice_product()
+
+# 그래픽카드 - 제조사/칩셋 제조사/제품 시리즈
+go_to_category(wait, "그래픽카드")
+choice_content_input_list(wait, "제조사")
+choice_content_input_list(wait, "칩셋 제조사")
+choice_content_input_list(wait, "제품 시리즈")
+choice_product()
+
+# SSD - 제조사/용량
+go_to_category(wait, "SSD")
+choice_content_input_list(wait, "제조사")
+choice_content_input_list(wait, "용량")
+choice_product()
+
+# 케이스 - 제조사/제품 분류/케이스 크기
+go_to_category(wait, "케이스")
+choice_content_input_list(wait, "제조사")
+choice_content_input_list(wait, "제품 분류")
+choice_content_input_list(wait, "케이스 크기")
+choice_product()
+
+# 파워 - 제조사/제품 분류/정격출력
+go_to_category(wait, "파워")
+choice_content_input_list(wait, "제조사")
+choice_content_input_list(wait, "제품 분류")
+choice_content_input_list(wait, "정격출력")
 choice_product()
 
 time.sleep(5)
