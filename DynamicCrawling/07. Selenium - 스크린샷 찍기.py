@@ -1,4 +1,4 @@
-# python "DynamicCrawling/07. Selenium - ½ºÅ©¸°¼¦ Âï±â.py"
+# python "DynamicCrawling/07. Selenium - ìŠ¤í¬ë¦°ìƒ· ì°ê¸°.py"
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -10,11 +10,11 @@ from selenium.webdriver.support import expected_conditions as EC
 import os
 import time
 
-# Å©·Ò µå¶óÀÌ¹ö ÀÚµ¿ ¾÷µ¥ÀÌÆ®À» À§ÇÑ ¸ğµâ
+# í¬ë¡¬ ë“œë¼ì´ë²„ ìë™ ì—…ë°ì´íŠ¸ì„ ìœ„í•œ ëª¨ë“ˆ
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-# Element Ã£´Â ÇÔ¼ö
+# Element ì°¾ëŠ” í•¨ìˆ˜
 def find_visible(wait: WebDriverWait, css_selector: str) -> WebDriverWait:
     return wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, css_selector)))
 
@@ -42,21 +42,46 @@ def finds_visible_x(wait: WebDriverWait, xpath: str):
     return browser.find_elements(By.XPATH, xpath)
 
 
-# Å©·Ò ºê¶ó¿ìÀú ¿É¼Ç ÁöÁ¤
+# í¬ë¡¬ ë¸Œë¼ìš°ì € ì˜µì…˜ ì§€ì •
 chrome_options = Options()
 
-# ºÒÇÊ¿äÇÑ ¿¡·¯ ¸Ş½ÃÁö »èÁ¦
+# ë¶ˆí•„ìš”í•œ ì—ëŸ¬ ë©”ì‹œì§€ ì‚­ì œ
 chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
-# Å©·Ò µå¶óÀÌ¹ö ÃÖ½Å ¹öÀü ¼³Á¤
+# ë¸Œë¼ìš°ì €ë¥¼ ë°±ê·¸ë¼ìš´ë“œì—ì„œ ì‹¤í–‰
+chrome_options.add_argument("--headless")
+
+# ë¸Œë¼ìš°ì € ì°½ì˜ í¬ê¸° ì§€ì •
+chrome_options.add_argument("--window-size=1280,10000")
+
+# í¬ë¡¬ ë“œë¼ì´ë²„ ìµœì‹  ë²„ì „ ì„¤ì •
 service = Service(executable_path=ChromeDriverManager().install())
 
 
 browser = webdriver.Chrome(service=service, options=chrome_options)
 
-# ÆäÀÌÁö ·Îµù ´ë±â
+# í˜ì´ì§€ ë¡œë”© ëŒ€ê¸°
 wait = WebDriverWait(browser, 10)
 short_wait = WebDriverWait(browser, 3)
 
-# ¿øÇÏ´Â ÆäÀÌÁö¿¡ Á¢¼Ó
+# ì›í•˜ëŠ” í˜ì´ì§€ì— ì ‘ì†
 browser.get("https://www.naver.com/")
+find_visible(wait, "input#query").send_keys("íŒ¨ìŠ¤íŠ¸ìº í¼ìŠ¤\n")
+
+# íŠ¹ì • ìš”ì†Œ ì°¾ê¸°
+e = finds_visible(wait, 'section.sp_intent_block')[1].find_element(By.CSS_SELECTOR, 'li:nth-of-type(1)')
+
+# í•´ë‹¹ ìš”ì†Œì˜ ìŠ¤í¬ë¦°ìƒ· ì°ê¸° - ê²½ë¡œ ë° íŒŒì¼ëª…ì„ ì¸ìë¡œ ì§€ì •
+# e.screenshot("./static/img/test01.png")
+
+# ì „ì²´ ìŠ¤í¬ë¦°ìƒ· ì°ê¸° - ê²½ë¡œ ë° íŒŒì¼ëª…ì„ ì¸ìë¡œ ì§€ì •
+# browser.save_screenshot("./static/img/test04.png")
+
+# í•´ë‹¹ ìš”ì†Œì˜ í…Œë‘ë¦¬ì— ë¹¨ê°„ ì„  ì¶”ê°€
+browser.execute_script("document.querySelectorAll('section.sp_intent_block')[1].querySelector('li:nth-of-type(1)').setAttribute('style', 'border:10px solid red')")
+
+# body ìš”ì†Œì˜ ìŠ¤í¬ë¦°ìƒ·ì„ ì°ê¸°
+body = find_visible(wait, "body")
+body.screenshot("./static/img/test06.png")
+
+browser.quit()
